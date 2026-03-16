@@ -4,6 +4,7 @@
   "stats": { "xp": 0, "lives": 3 },
   "scenes": {
     "uvod": {
+      "name": "Serverovna — vstup",
       "text": "Otevíráš dveře serverovny. Vzduchotechnika mlčí.\nRack 42U bliká červeně na pozici 12U.\nNa podlaze leží patch kabel. U zdi stojí skříňka nástrojů.",
       "choices": [
         { "cmd": "prozkoumej rack",  "next": "rack",    "xp": 10 },
@@ -13,6 +14,7 @@
       ]
     },
     "rack": {
+      "name": "Serverovna — Rack 42U",
       "text": "Switch Cisco 2960, pozice 12U — port Gi0/1 (uplink) je odpojený.\nKabely vedou k routeru Cisco 2911 v pozici 4U.\nRouter má port Gi0/0 svítící oranžově.",
       "choices": [
         { "cmd": "zapoj kabel na switch",  "next": "konec_dobry",  "requires": "patch_kabel", "missing": "Nemáš žádný kabel.", "xp": 50 },
@@ -22,6 +24,7 @@
       ]
     },
     "skrinka": {
+      "name": "Serverovna — skříňka nástrojů",
       "text": "Ve skříňce: tester kabelů, crimping kleště, zápisník s hesly.\nNa polici leží záložní patch kabel.",
       "choices": [
         { "cmd": "vezmi tester",   "next": "skrinka", "gives": "tester_kabelu", "once": true, "reply": "Vzal jsi tester kabelů.", "xp": 5 },
@@ -30,6 +33,7 @@
       ]
     },
     "router": {
+      "name": "Serverovna — Router 2911",
       "text": "Router Cisco 2911, pozice 4U.\nInterface Gi0/0 svítí oranžově: line protocol is down.\nKonzole hlásí: '%LINK-3-UPDOWN: GigabitEthernet0/0, changed state to down'\nPort fyzicky nemá zapojený kabel.",
       "choices": [
         { "cmd": "zapoj kabel na router", "next": "konec_expert", "requires": "patch_kabel", "missing": "Nemáš kabel.", "xp": 75 },
@@ -37,19 +41,23 @@
       ]
     },
     "po_resetu": {
+      "name": "Game Over",
       "text": "Switch se restartoval na výchozí konfiguraci.\nVLANy, trunk porty, spanning-tree — vše pryč.\nSíť sice nějak běží, ale VLAN segmentace je rozbitá.\nŘeditel volá. Bezpečák volá. Všichni volají.",
       "dead": true
     },
     "konec_zbabely": {
+      "name": "Konec",
       "text": "Odešel jsi ze serverovny.\nSíť je stále down. Po čtyřech hodinách přijel externista.\nZapojil kabel. Vystavil fakturu na 4 000 Kč. Odešel.",
       "end": true
     },
     "konec_dobry": {
-      "text": "Zapojuješ patch kabel do Gi0/1 na switchi.\nKontrolka přeskočí z červené na zelenou.\nPingy procházejí. Helpdesk telefon ztichne.\n\n✓ Výpadek odstraněn. Dobrá práce, Síťaříku.",
+      "name": "Výpadek odstraněn",
+      "text": "Zapojuješ patch kabel do Gi0/1 na switchi.\nKontrolka přeskočí z červené na zelenou.\nPingy procházejí. Helpdesk telefon ztichne.\n\n✓ Dobrá práce, Síťaříku.",
       "end": true
     },
     "konec_expert": {
-      "text": "Sledoval jsi signál celou cestu — od switche až k routeru.\nZapojuješ kabel do Gi0/0. Interface přechází do UP stavu.\nSíť běží. Víš přesně proč a jak.\n\n✓ Expertní diagnóza. Máš to v krvi.",
+      "name": "Expertní diagnóza",
+      "text": "Sledoval jsi signál celou cestu — od switche až k routeru.\nZapojuješ kabel do Gi0/0. Interface přechází do UP stavu.\nSíť běží. Víš přesně proč a jak.\n\n✓ Máš to v krvi.",
       "end": true
     }
   }

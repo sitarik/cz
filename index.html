@@ -315,7 +315,7 @@
 
     /* ── LOG VIEW ── */
 
-    .log-listing-cmd { color: var(--dim); font-size: 0.82rem; margin-bottom: 16px; }
+    .log-listing-cmd { color: var(--dim); font-size: 0.82rem; margin-bottom: 16px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .log-listing-cmd::before { content: "$ "; color: var(--green); }
 
     .log-entry {
@@ -327,7 +327,7 @@
       text-decoration: none;
       color: var(--text);
     }
-    .log-entry:first-of-type { border-top: 1px solid var(--border); }
+    .log-entry:last-of-type { border-bottom: none; }
     .log-entry:hover .log-entry-title { color: var(--accent); }
     .log-entry:hover .log-entry-arrow  { color: var(--accent); }
 
@@ -337,7 +337,7 @@
     .log-count { margin-top: 16px; color: var(--dim); font-size: 0.78rem; }
 
     .log-back {
-      display: inline-block;
+      display: block;
       position: sticky;
       top: 0;
       color: var(--dim);
@@ -347,7 +347,8 @@
       cursor: pointer;
       transition: color 0.15s;
       background: var(--bg);
-      padding: 8px 0 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
       z-index: 10;
     }
     .log-back::before { content: "← "; }

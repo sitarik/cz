@@ -31,10 +31,11 @@
 
   // ── Print ──
 
-  function tPrint(text, cls) {
+  function tPrint(text, cls, cmd) {
     var d = document.createElement('div');
     d.className = cls ? 'tl-' + cls : '';
     d.textContent = text || '';
+    if (cmd) { d.classList.add('tl-clickable'); d.dataset.cmd = cmd; }
     termOutput.appendChild(d);
     termBody.scrollTop = termBody.scrollHeight;
   }
@@ -110,25 +111,42 @@
     gameScene = sceneId;
     var scene = gameData.scenes[sceneId];
     if (!scene) { tPrint('⚠ Scéna nenalezena: ' + sceneId, 'error'); return; }
+
+    // Nadpis scény
+    var sceneName = scene.name || sceneId.replace(/[-_]/g, ' ').toUpperCase();
     tPrint('');
-    scene.text.split('\n').forEach(function (l) { tPrint(l, 'dim'); });
+    tPrint('▌ ' + sceneName, 'accent');
+    tPrint('─────────────────────────────────────', 'dim');
+
+    // Text scény
+    tPrint('');
+    scene.text.split('\n').forEach(function (l) { tPrint('  ' + l, 'dim'); });
+
     if (scene.end) {
       tPrint('');
       tPrint('── KONEC HRY ──', 'success');
-      tPrint('Celkem XP: ' + gameStats.xp, 'accent');
-      tPrint('restart   nová hra   │   exit   zavřít terminál', 'dim');
+      tPrint('  Celkem XP: ' + gameStats.xp, 'accent');
+      tPrint('');
+      tPrint('  restart   ·   exit', 'dim');
+      tPrint('');
       gameActive = false; updateHud(); return;
     }
     if (scene.dead) {
       tPrint('');
       tPrint('── GAME OVER ──', 'error');
-      tPrint('restart   nová hra   │   exit   zavřít terminál', 'dim');
+      tPrint('');
+      tPrint('  restart   ·   exit', 'dim');
+      tPrint('');
       gameActive = false; updateHud(); return;
     }
+
     var choices = getChoices(scene);
     if (choices.length) {
       tPrint('');
-      tPrint('▸  ' + choices.map(function (c) { return c.cmd; }).join('   ▸  '), 'accent');
+      choices.forEach(function (c) {
+        tPrint('  > ' + c.cmd, 'accent', c.cmd);
+      });
+      tPrint('');
     }
   }
 
@@ -174,7 +192,7 @@
         updateHud();
         tPrint('');
         tPrint('── ' + data.title.toUpperCase() + ' ──', 'accent');
-        tPrint('inventar   seznam předmětů   │   exit   ukončit hru', 'dim');
+        tPrint('  inventar   ·   exit', 'dim');
         loadScene(data.start);
       })
       .catch(function () { tPrint('Chyba při načítání hry.', 'error'); });

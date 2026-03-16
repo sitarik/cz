@@ -1,4 +1,3 @@
-
 # Sneakernet jako deterministická fyzická přenosová architektura ve vysoce objemových datových scénářích
 ---
 *Publikováno 13. 2. 2026*
