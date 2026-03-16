@@ -100,14 +100,18 @@
   function renderGospel() {
     if (!gospels.length) return;
     var g = gospels[gospelIdx];
-    document.getElementById('gospel-label').textContent = 'NETWORK GOSPEL — VERŠ ' + g.n;
-    document.getElementById('gospel-content').innerHTML =
+    var html =
       '<div class="dim-lines">' +
         g.lines.map(function (l) {
           return '<span class="gospel-line">' + esc(l) + '</span>';
         }).join('') +
       '</div>' +
       '<div class="gospel-verse">Ev. podle Síťaříka ' + g.n + '</div>';
+    var label = 'NETWORK GOSPEL — VERŠ ' + g.n;
+    document.getElementById('gospel-label').textContent = label;
+    document.getElementById('gospel-content').innerHTML = html;
+    document.getElementById('gospel-label-m').textContent = label;
+    document.getElementById('gospel-content-m').innerHTML = html;
   }
 
   document.getElementById('btn-gospel').addEventListener('click', function () {

@@ -419,7 +419,7 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === '`' && document.activeElement.tagName !== 'INPUT') {
+    if (e.key === '`' && document.activeElement.tagName !== 'INPUT' && window.innerWidth > 768) {
       e.preventDefault(); termOpen();
     }
     if (termOverlay.classList.contains('open') &&

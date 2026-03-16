@@ -569,12 +569,43 @@
       animation: tblink 1.06s step-end infinite;
     }
 
+    /* ── GOSPEL MOBIL — skrytý na desktopu ── */
+    .gospel-mobile { display: none; }
+
     /* ── RESPONSIVE ── */
 
-    @media (max-width: 640px) {
-      .grid-3 { grid-template-columns: 1fr; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .card-eduxo { flex-direction: column; }
+    @media (max-width: 768px) {
+      html, body { overflow: auto; height: auto; }
+
+      .layout {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+      }
+
+      /* Levý panel */
+      .panel-left { width: 100%; align-items: center; padding-top: 20px; }
+      .logo-sitarik { width: 50%; height: auto; }
+      .whoami-block { width: 90%; }
+      #fake-prompt  { display: none; }
+
+      /* Střední panel */
+      .panel-center { overflow: visible; width: 100%; }
+      .center-scroll { overflow: visible; height: auto; }
+      .center-sticky { display: none; }
+      .page { padding: 0 16px 32px; }
+
+      /* Skryté sekce */
+      .morning       { display: none; }
+      .card-eduxo    { display: none; }
+      #grid-github-ai { display: none; }
+      #btn-tip       { display: none; }
+
+      /* Mobilní gospel */
+      .gospel-mobile { display: block; margin-bottom: 14px; }
+
+      /* Pravý panel */
+      .panel-right { display: none; }
     }
   </style>
 </head>
@@ -650,7 +681,7 @@
   </div>
 
   <!-- ŘÁDEK: GitHub | AI -->
-  <div class="grid-row grid-2">
+  <div class="grid-row grid-2" id="grid-github-ai">
 
     <!-- GitHub -->
     <div class="card">
@@ -678,6 +709,12 @@
       </ul>
     </div>
 
+  </div>
+
+  <!-- GOSPEL — pouze mobil -->
+  <div class="gospel-mobile">
+    <div class="card-title"><span id="gospel-label-m">NETWORK GOSPEL</span></div>
+    <div id="gospel-content-m"><span style="color:var(--dim)">načítám…</span></div>
   </div>
 
   <!-- LOG — velká karta -->
