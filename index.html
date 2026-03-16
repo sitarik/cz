@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/favicon_sitarik.png" type="image/png">
+  <title>Síťařík</title>
+  <meta name="description" content="Osobní web Síťaříka.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #252525;
+      --bg2:     #2e2e2e;
+      --border:  #3a3a3a;
+      --text:    #ecf0f1;
+      --green:   #4ade80;
+      --dim:     #7f8c8d;
+      --accent:  #8c52ff;
+      --red:     #f87171;
+      --yellow:  #facc15;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 860px 1fr;
+      height: 100vh;
+    }
+
+    .panel-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .logo-sitarik {
+      width: 80%;
+      height: 70px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .left-photo {
+      margin-top: 20px;
+      width: 40%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+    }
+
+    .whoami-block {
+      margin-top: 28px;
+      width: 80%;
+    }
+
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding-top: 120px;
+    }
+
+    .gospel-panel {
+      width: 80%;
+    }
+
+    .panel-center {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .center-sticky {
+      flex-shrink: 0;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 20px 0;
+    }
+
+    .center-scroll {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .center-scroll { scrollbar-width: none; }
+    .center-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── HLAVIČKA ── */
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 14px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .header-left { font-size: 0.9rem; color: var(--green); font-weight: 600; }
+    .header-left span { color: var(--dim); font-weight: 400; }
+    .header-right { display: flex; gap: 20px; font-size: 0.82rem; color: var(--dim); }
+    #time { color: var(--text); font-weight: 600; font-size: 0.9rem; }
+
+    /* ── OBSAH ── */
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+
+    /* ── LAST LOGIN ── */
+
+    .last-login {
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin-bottom: 20px;
+    }
+
+    /* ── TIP DNE ── */
+
+    .tip-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+
+
+    .tip-cmd  { color: var(--green); font-size: 0.92rem; margin-bottom: 4px; }
+    .tip-cmd::before { content: "$ "; color: var(--dim); }
+    .tip-desc { color: var(--text); font-size: 0.88rem; line-height: 1.5; }
+    .tip-cat  { font-size: 0.72rem; color: var(--dim); margin-top: 6px; }
+
+    /* ── GOSPEL ── */
+
+    .gospel-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+
+    .dim-lines {
+      color: var(--dim);
+      font-size: 0.9rem;
+      font-style: italic;
+      line-height: 1.8;
+    }
+    .gospel-line { display: block; }
+
+    .gospel-verse {
+      font-size: 0.72rem;
+      color: var(--dim);
+      margin-top: 10px;
+      opacity: 0.7;
+      font-style: normal;
+      letter-spacing: 1px;
+    }
+
+    /* ── TLAČÍTKO DALŠÍ ── */
+
+    .btn-next {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-next:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── RANNÍ STRIP ── */
+
+    .morning {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .morning a {
+      flex: 1;
+      text-align: center;
+      padding: 10px 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.82rem;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .morning a:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── MŘÍŽKA ── */
+
+    .grid-row {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* ── KARTY ── */
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s;
+    }
+
+    .card-title {
+      font-size: 0.68rem;
+      color: var(--dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+    }
+    .card-title::before { content: "─"; margin-right: 8px; }
+    .card-title .btn-next { margin-left: auto; }
+
+    /* ── TLAČÍTKA UVNITŘ KARET ── */
+
+    .btn-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      text-decoration: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-card:last-child { margin-bottom: 0; }
+    .btn-card:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-card-desc { color: var(--dim); font-size: 0.78rem; }
+    .btn-card:hover .btn-card-desc { color: var(--accent); }
+
+    /* ── EDUXO — velká karta ── */
+
+    .card-eduxo {
+      margin-bottom: 14px;
+      cursor: default;
+    }
+    .card-eduxo:hover { border-color: var(--border); }
+    .card-eduxo .btn-card { margin-bottom: 0; height: 100%; }
+
+    /* ── AI KARTA — seznam ── */
+
+    .card-ai { cursor: default; }
+    .card-ai:hover { border-color: var(--border); }
+
+    .ai-links { list-style: none; }
+    .ai-links li { border-top: 1px solid var(--border); padding: 6px 0; }
+    .ai-links li:first-child { border-top: none; padding-top: 0; }
+    .ai-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.15s;
+    }
+    .ai-links a::before { content: "> "; color: var(--dim); }
+    .ai-links a:hover { color: var(--accent); }
+
+    /* ── LOG KARTA ── */
+
+    .card-log { cursor: default; }
+    .card-log:hover { border-color: var(--border); }
+
+
+    .log-empty { color: var(--dim); font-size: 0.82rem; }
+
+    /* ── LOG VIEW ── */
+
+    .log-listing-cmd { color: var(--dim); font-size: 0.82rem; margin-bottom: 16px; }
+    .log-listing-cmd::before { content: "$ "; color: var(--green); }
+
+    .log-entry {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .log-entry:first-of-type { border-top: 1px solid var(--border); }
+    .log-entry:hover .log-entry-title { color: var(--accent); }
+    .log-entry:hover .log-entry-arrow  { color: var(--accent); }
+
+    .log-entry-date  { color: var(--dim); font-size: 0.82rem; flex-shrink: 0; width: 88px; }
+    .log-entry-title { font-size: 0.92rem; transition: color 0.15s; }
+    .log-entry-arrow { color: var(--dim); margin-left: auto; font-size: 0.82rem; transition: color 0.15s; }
+    .log-count { margin-top: 16px; color: var(--dim); font-size: 0.78rem; }
+
+    .log-back {
+      display: inline-block;
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.82rem;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .log-back::before { content: "← "; }
+    .log-back:hover { color: var(--accent); }
+
+    .log-post-date {
+      color: var(--dim);
+      font-size: 0.78rem;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #log-post-content h1 { color: var(--accent); font-size: 1.3rem; font-weight: normal; margin-bottom: 8px; }
+    #log-post-content h2 { color: var(--accent); font-size: 1.05rem; font-weight: normal; margin: 20px 0 8px; }
+    #log-post-content h3 { color: var(--accent); font-size: 0.925rem; font-weight: normal; margin: 16px 0 6px; }
+    #log-post-content p  { line-height: 1.75; margin: 8px 0; font-size: 0.93rem; }
+    #log-post-content ul { margin: 2px 0 12px; padding-left: 18px; }
+    #log-post-content ul ul { margin: 2px 0 4px; padding-left: 18px; }
+    #log-post-content li { color: var(--dim); margin: 3px 0; font-size: 0.9rem; line-height: 1.6; }
+    #log-post-content li::marker { color: var(--accent); }
+    #log-post-content code { background: var(--bg2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 2px; font-family: inherit; font-size: 0.88em; color: var(--green); }
+    #log-post-content pre  { background: var(--bg2); border: 1px solid var(--border); padding: 12px 14px; border-radius: 3px; overflow-x: auto; margin: 12px 0; color: var(--green); font-size: 0.88rem; line-height: 1.5; }
+    #log-post-content pre code { background: none; border: none; padding: 0; }
+    #log-post-content hr     { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
+    #log-post-content strong { font-weight: bold; }
+    #log-post-content em     { color: var(--dim); font-style: italic; }
+    #log-post-content blockquote { background: var(--bg2); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 3px; color: var(--dim); margin: 10px 0; font-style: italic; }
+    #log-post-content .callout { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: 3px; margin: 10px 0; font-size: 0.9rem; line-height: 1.6; }
+    #log-post-content .callout-icon { flex-shrink: 0; font-style: normal; }
+    #log-post-content .callout-info    { background: #1a2a40; border-left: 3px solid #3b82f6; color: #93c5fd; }
+    #log-post-content .callout-tip     { background: #1a2e1a; border-left: 3px solid #4ade80; color: #86efac; }
+    #log-post-content .callout-warning { background: #2e2a14; border-left: 3px solid #facc15; color: #fde68a; }
+    #log-post-content .callout-danger  { background: #2e1a1a; border-left: 3px solid #f87171; color: #fca5a5; }
+    #log-post-content .callout-prikaz  { background: var(--bg2); border-left: 3px solid var(--green); color: var(--green); font-family: inherit; }
+    #log-post-content .callout-otazka  { background: #1e1a2e; border-left: 3px solid #8c52ff; color: #c4b5fd; }
+    #log-post-content a { color: var(--accent); text-decoration: none; }
+    #log-post-content a:hover { text-decoration: underline; }
+    #log-post-content table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.88rem; }
+    #log-post-content th { background: var(--bg2); color: var(--accent); border: 1px solid var(--border); padding: 6px 10px; text-align: left; font-weight: normal; }
+    #log-post-content td { border: 1px solid var(--border); padding: 6px 10px; color: var(--text); }
+    #log-post-content tr:nth-child(even) td { background: var(--bg2); }
+    #log-post-content img { max-width: 100%; border-radius: 6px; display: block; margin: 12px auto 16px; }
+
+    /* ── TERMINÁL ── */
+
+    #terminal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    #terminal-overlay.open { display: flex; }
+
+    #terminal-win {
+      width: 85vw;
+      max-width: 1100px;
+      height: 78vh;
+      background: #141414;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    #terminal-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #242424;
+      border-bottom: 1px solid #333;
+      border-radius: 8px 8px 0 0;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    #terminal-titlebar span { font-size: 0.82rem; color: #999; }
+
+    #terminal-close-btn {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #555;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 8px;
+      line-height: 14px;
+      text-align: center;
+      color: rgba(0,0,0,0.5);
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    #terminal-close-btn:hover { background: var(--red); color: #fff; }
+
+    #terminal-hud {
+      padding: 5px 16px;
+      font-size: 0.75rem;
+      color: var(--red);
+      background: #1c1c1c;
+      border-bottom: 1px solid #333;
+      flex-shrink: 0;
+      display: none;
+      letter-spacing: 1px;
+    }
+
+    #terminal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: #333 transparent;
+      cursor: text;
+    }
+    #terminal-body::-webkit-scrollbar { width: 6px; }
+    #terminal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    #terminal-body::-webkit-scrollbar-track { background: transparent; }
+
+    #terminal-output { font-size: 14px; line-height: 1.5; }
+    #terminal-output div { min-height: 1.4em; white-space: pre-wrap; word-break: break-word; }
+    .tl-prompt-line  { color: var(--green); }
+    .tl-dim          { color: #666; }
+    .tl-accent       { color: var(--accent); }
+    .tl-success      { color: var(--green); }
+    .tl-error        { color: var(--red); }
+    .tl-yellow       { color: var(--yellow); }
+    .tl-clickable    { cursor: pointer; }
+    .tl-clickable:hover { color: var(--accent); }
+
+    #terminal-input-line {
+      display: none;
+      align-items: center;
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 1.4em;
+    }
+    #terminal-input-line .t-prompt { color: var(--green); white-space: pre; }
+    #terminal-input-text { color: #ecf0f1; }
+    #terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1.1em;
+      background: var(--accent);
+      margin-left: 1px;
+      vertical-align: text-bottom;
+      animation: tblink 1.06s step-end infinite;
+    }
+    @keyframes tblink {
+      0%, 100% { background: var(--accent); }
+      50%       { background: transparent; }
+    }
+    #terminal-hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 1px;
+      height: 1px;
+    }
+
+    #fake-prompt {
+      margin: 24px auto 0;
+      width: 80%;
+      background: #141414;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    #fake-prompt:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 28px rgba(140,82,255,0.2);
+    }
+
+    #fake-prompt-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: #242424;
+      border-bottom: 1px solid #333;
+    }
+    #fake-prompt-titlebar span { font-size: 0.72rem; color: #999; }
+
+    #fake-prompt-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #555;
+    }
+
+    #fake-prompt-body {
+      padding: 8px 12px;
+      color: var(--green);
+      font-size: 0.82rem;
+    }
+
+    #fake-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 0.85em;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: tblink 1.06s step-end infinite;
+    }
+
+    /* ── RESPONSIVE ── */
+
+    @media (max-width: 640px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .card-eduxo { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="panel-left">
+    <a href="#"><img class="logo-sitarik" src="assets/sitarik_logo_white.png" alt="sitarik"></a>
+    <img class="left-photo" id="left-photo" src="" alt="Síťařík">
+    <div class="whoami-block">
+      <div class="card-title">sitarik@cz:~$ whoami</div>
+      <div class="dim-lines">Učím počítačové sítě &ndash; od domácích routerů, které &ldquo;nějak fungují&rdquo;, přes Cisco, kde už to musí fungovat, až po servery a clustery, kde to prostě spadnout nesmí.</div>
+      <div class="dim-lines" style="text-align:center; margin-top:12px;">
+        <span style="color:var(--red)">Chyba 404: Síťařík nenalezen.</span><br>
+        <span style="color:var(--accent)">&hellip;dokud nepřijde do učebny.</span>
+      </div>
+      <div id="fake-prompt" title="otevřít terminál">
+        <div id="fake-prompt-titlebar">
+          <span>sitarik@cz — bash</span>
+          <div id="fake-prompt-dot"></div>
+        </div>
+        <div id="fake-prompt-body">sitarik@cz:~$ <span id="fake-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-center">
+
+    <div class="center-sticky">
+      <div class="header">
+        <div class="header-left">sitarik<span>@cz:~$</span></div>
+        <div class="header-right">
+          <span id="time"></span>
+          <span id="date"></span>
+        </div>
+      </div>
+      <div class="last-login" id="last-login"></div>
+    </div>
+
+    <div class="center-scroll">
+
+  <div id="view-dashboard">
+<div class="page">
+
+  <!-- TIP DNE -->
+  <div class="tip-box">
+    <div class="card-title">
+      <span id="tip-label">TIP DNE</span>
+      <button class="btn-next" id="btn-tip">Další</button>
+    </div>
+    <div id="tip-content"><span style="color:var(--dim)">načítám…</span></div>
+  </div>
+
+  <!-- RANNÍ STRIP -->
+  <div class="morning">
+    <a href="https://outlook.office.com/mail/" target="_blank">Mail</a>
+    <a href="https://teams.microsoft.com/" target="_blank">Teams</a>
+    <a href="https://bakaweb.cichnovabrno.cz/" target="_blank">Bakaláři</a>
+  </div>
+
+  <!-- EDUXO — velká karta s dvojicí tlačítek -->
+  <div class="card card-eduxo">
+    <div class="card-title">EDUXO</div>
+    <div class="grid-row grid-2" style="margin-bottom:0">
+      <a class="btn-card" href="https://eduxo.cz" target="_blank">
+        <span>eduxo.cz</span>
+        <span class="btn-card-desc">výukový web</span>
+      </a>
+      <a class="btn-card" href="https://www.eduxo.cz/studovna/" target="_blank">
+        <span>studovna</span>
+        <span class="btn-card-desc">opory a materiály</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ŘÁDEK: GitHub | AI -->
+  <div class="grid-row grid-2">
+
+    <!-- GitHub -->
+    <div class="card">
+      <div class="card-title">GITHUB</div>
+      <a class="btn-card" href="https://github.com/sitarik" target="_blank">
+        <span>sitarik</span>
+        <span class="btn-card-desc">repozitáře</span>
+      </a>
+      <a class="btn-card" href="https://github.com/eduxo" target="_blank">
+        <span>eduxo</span>
+        <span class="btn-card-desc">repozitáře</span>
+      </a>
+    </div>
+
+    <!-- AI -->
+    <div class="card card-ai">
+      <div class="card-title">AI</div>
+      <ul class="ai-links">
+        <li><a href="https://claude.ai" target="_blank">Claude</a></li>
+        <li><a href="https://chatgpt.com" target="_blank">ChatGPT</a></li>
+        <li><a href="https://gemini.google.com" target="_blank">Gemini</a></li>
+        <li><a href="https://perplexity.ai" target="_blank">Perplexity</a></li>
+        <li><a href="https://grok.com" target="_blank">Grok</a></li>
+        <li><a href="https://chat.deepseek.com" target="_blank">DeepSeek</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- LOG — velká karta -->
+  <div class="card card-log">
+    <div class="card-title">LOG<a href="#log" class="btn-next" style="text-decoration:none">všechny záznamy</a></div>
+    <div id="log-content"><span class="log-empty">načítám…</span></div>
+  </div>
+
+</div><!-- .page -->
+  </div><!-- #view-dashboard -->
+
+  <div id="view-log" style="display:none">
+    <div class="page">
+
+      <div id="log-listing">
+        <div class="log-listing-cmd">git log --oneline --author="sitarik"</div>
+        <div id="log-listing-entries"><span style="color:var(--dim)">načítám…</span></div>
+      </div>
+
+      <div id="log-post" style="display:none">
+        <a class="log-back" id="log-back" href="#log">zpět na log</a>
+        <div id="log-post-date" class="log-post-date"></div>
+        <div id="log-post-content"></div>
+      </div>
+
+    </div>
+  </div><!-- #view-log -->
+
+    </div><!-- .center-scroll -->
+  </div><!-- .panel-center -->
+  <div class="panel-right">
+    <div class="gospel-panel">
+      <div class="card-title">
+        <span id="gospel-label">NETWORK GOSPEL</span>
+        <button class="btn-next" id="btn-gospel">Další</button>
+      </div>
+      <div id="gospel-content"><span style="color:var(--dim)">načítám…</span></div>
+    </div>
+  </div>
+</div><!-- .layout -->
+
+<div id="terminal-overlay">
+  <div id="terminal-win">
+    <div id="terminal-titlebar">
+      <span>sitarik@cz — bash</span>
+      <button id="terminal-close-btn" title="Zavřít terminál">✕</button>
+    </div>
+    <div id="terminal-hud"></div>
+    <div id="terminal-body">
+      <div id="terminal-output"></div>
+      <div id="terminal-input-line">
+        <span class="t-prompt">sitarik@cz:~$ </span><span id="terminal-input-text"></span><span id="terminal-cursor"></span>
+      </div>
+      <input id="terminal-hidden-input" type="text" autocomplete="off" spellcheck="false" autocapitalize="none">
+    </div>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+
+<script src="js/commands.js"></script>
+<script src="js/terminal.js"></script>
+
+</body>
+</html>

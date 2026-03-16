@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typografie — sitarik.cz</title>
+  <link rel="icon" href="assets/favicon_sitarik.png" type="image/png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:      #252525;
+      --bg2:     #2e2e2e;
+      --bg3:     #1e1e1e;
+      --border:  #3a3a3a;
+      --text:    #ecf0f1;
+      --green:   #4ade80;
+      --dim:     #7f8c8d;
+      --accent:  #8c52ff;
+      --red:     #f87171;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ── LAYOUT ── */
+
+    .page {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ── HLAVIČKA ── */
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .header-left { font-size: 0.9rem; color: var(--green); font-weight: 600; }
+    .header-left span { color: var(--dim); font-weight: 400; }
+    .header-title { font-size: 0.75rem; color: var(--dim); letter-spacing: 2px; text-transform: uppercase; }
+    .header-back { font-size: 0.82rem; color: var(--dim); text-decoration: none; transition: color 0.15s; }
+    .header-back:hover { color: var(--accent); }
+    .header-back::before { content: "← "; }
+
+    /* ── PANEL HEADERS ── */
+
+    .panel-headers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header {
+      padding: 6px 20px;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .panel-header.left  { background: var(--bg3); border-right: 1px solid var(--border); }
+    .panel-header.right { background: var(--bg); }
+
+    .row-label { display: flex; justify-content: space-between; align-items: center; }
+
+    /* ── SCROLL AREA ── */
+
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ── ŘÁDKY ── */
+
+    .rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .row-left, .row-right {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .row-left {
+      background: var(--bg3);
+      border-right: 1px solid var(--border);
+    }
+
+    .row-right {
+      background: var(--bg);
+    }
+
+    .row-label {
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .row-left  .row-label { color: var(--accent); }
+    .row-right .row-label { color: var(--dim); }
+
+    .syntax {
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--dim);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ── MARKDOWN NÁHLED ── */
+
+    .md h1 { color: var(--accent); font-size: 1.3rem; font-weight: normal; margin-bottom: 8px; }
+    .md h2 { color: var(--accent); font-size: 1.05rem; font-weight: normal; margin: 20px 0 8px; }
+    .md h3 { color: var(--accent); font-size: 0.925rem; font-weight: normal; margin: 16px 0 6px; }
+    .md p  { line-height: 1.75; margin: 8px 0; font-size: 0.93rem; }
+    .md ul { margin: 2px 0 12px; padding-left: 18px; }
+    .md ul ul { margin: 2px 0 4px; padding-left: 18px; }
+    .md li { color: var(--dim); margin: 3px 0; font-size: 0.9rem; line-height: 1.6; }
+    .md li::marker { color: var(--accent); }
+    .md code { background: var(--bg2); border: 1px solid var(--border); padding: 1px 5px; border-radius: 2px; font-family: inherit; font-size: 0.88em; color: var(--green); }
+    .md pre  { background: var(--bg2); border: 1px solid var(--border); padding: 12px 14px; border-radius: 3px; overflow-x: auto; margin: 12px 0; color: var(--green); font-size: 0.88rem; line-height: 1.5; }
+    .md pre code { background: none; border: none; padding: 0; }
+    .md hr     { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
+    .md strong { font-weight: bold; }
+    .md em     { color: var(--dim); font-style: italic; }
+    .md blockquote { background: var(--bg2); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 3px; color: var(--dim); margin: 10px 0; font-style: italic; }
+    .md .callout { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: 3px; margin: 10px 0; font-size: 0.9rem; line-height: 1.6; }
+    .md .callout-icon { flex-shrink: 0; font-style: normal; }
+    .md .callout-info    { background: #1a2a40; border-left: 3px solid #3b82f6; color: #93c5fd; }
+    .md .callout-tip     { background: #1a2e1a; border-left: 3px solid #4ade80; color: #86efac; }
+    .md .callout-warning { background: #2e2a14; border-left: 3px solid #facc15; color: #fde68a; }
+    .md .callout-danger  { background: #2e1a1a; border-left: 3px solid #f87171; color: #fca5a5; }
+    .md .callout-prikaz  { background: var(--bg2); border-left: 3px solid var(--green); color: var(--green); font-family: inherit; }
+    .md .callout-otazka  { background: #1e1a2e; border-left: 3px solid #8c52ff; color: #c4b5fd; }
+    .md a { color: var(--accent); text-decoration: none; }
+    .md a:hover { text-decoration: underline; }
+    .md table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.88rem; }
+    .md th { background: var(--bg2); color: var(--accent); border: 1px solid var(--border); padding: 6px 10px; text-align: left; font-weight: normal; }
+    .md td { border: 1px solid var(--border); padding: 6px 10px; color: var(--text); }
+    .md tr:nth-child(even) td { background: var(--bg2); }
+    .md img { max-width: 100%; border-radius: 6px; display: block; margin: 12px auto 16px; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">sitarik<span>@cz:~$</span></div>
+    <span class="header-title">typografie / log</span>
+    <a href="index.html" class="header-back">sitarik.cz</a>
+  </div>
+
+  <div class="panel-headers">
+    <div class="panel-header left">Markdown — syntaxe</div>
+    <div class="panel-header right">Náhled — výsledek</div>
+  </div>
+
+  <div class="scroll-area">
+    <div class="rows" id="rows"></div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var sections = [
+    {
+      label: 'Nadpisy',
+      syntax: '# Nadpis 1. úrovně\n## Nadpis 2. úrovně\n### Nadpis 3. úrovně'
+    },
+    {
+      label: 'Důraz',
+      syntax: '**tučný text**\n*kurzíva*\n`inline kód`'
+    },
+    {
+      label: 'Odstavec',
+      syntax: 'Toto je normální odstavec textu.\nPrázdný řádek odděluje odstavce.'
+    },
+    {
+      label: 'Odrážkový seznam',
+      syntax: '- První položka\n- Druhá položka\n  - Vnořená položka\n  - Další vnořená\n- Třetí položka'
+    },
+    {
+      label: 'Blok kódu',
+      syntax: '```\nshow ip route\nshow running-config\nping 8.8.8.8 repeat 100\n```'
+    },
+    {
+      label: 'Citace',
+      syntax: '> Toto je důležitá poznámka\n> nebo citace z dokumentu.'
+    },
+    {
+      label: 'Tabulka',
+      syntax: '| Vrstva | Název       | Protokol |\n| ------ | ----------- | -------- |\n| 7      | Aplikační   | HTTP     |\n| 4      | Transportní | TCP/UDP  |\n| 3      | Síťová      | IP       |'
+    },
+    {
+      label: 'Odkaz',
+      syntax: '[Cisco NetAcad](https://netacad.com)'
+    },
+    {
+      label: 'Callout boxy',
+      syntax: '> [!INFO] Obecná poznámka nebo doplňující informace.\n\n> [!TIP] Praktický tip nebo zkratka.\n\n> [!WARNING] Pozor na tuto konfiguraci.\n\n> [!DANGER] Tato akce je nevratná.\n\n> [!PRIKAZ] show ip route\n\n> [!OTAZKA] Proč se používá VLAN segmentace?'
+    },
+    {
+      label: 'Horizontální oddělovač',
+      syntax: 'Text před oddělovačem\n\n---\n\nText po oddělovači'
+    },
+    {
+      label: 'Obrázek',
+      syntax: '![popis obrázku](assets/log/nazev.png)\n\nObrázky ukládej do log/assets/.\nV Obsidianu použij relativní cestu assets/nazev.png.'
+    },
+    {
+      label: 'Vložené PDF',
+      syntax: '![popis dokumentu](assets/log/dokument.pdf)\n\nPDF se zobrazí jako vložené okno (600px).\nPod ním je automaticky odkaz ke stažení.'
+    }
+  ];
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  var mdImgBase = '';
+
+  function inlineMd(text) {
+    return esc(text)
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, function (_, alt, src) {
+        var fullSrc = /^(https?:\/\/|\/)/.test(src) ? src : mdImgBase + src;
+        if (/\.pdf$/i.test(src)) {
+          return '<iframe src="' + fullSrc + '" style="width:100%;height:600px;border:1px solid var(--border);border-radius:6px;margin:12px 0 16px;display:block;"></iframe>' +
+                 '<a href="' + fullSrc + '" target="_blank" style="font-size:0.82rem;color:var(--dim);">↓ stáhnout PDF</a>';
+        }
+        return '<img src="' + fullSrc + '" alt="' + alt + '">';
+      })
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_, label, href) {
+        var fullHref = /^(https?:\/\/|\/)/.test(href) ? href : mdImgBase + href;
+        return '<a href="' + fullHref + '" target="_blank">' + label + '</a>';
+      })
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/`(.*?)`/g, '<code>$1</code>');
+  }
+
+  var CALLOUT_ICONS = { INFO: 'ℹ️', TIP: '💡', WARNING: '⚠️', DANGER: '❌', PRIKAZ: '$', OTAZKA: '❓' };
+
+  function renderMd(md) {
+    var lines = md.split('\n'), html = '', inCode = false, listOpen = false, subListOpen = false, inTable = false, calloutOpen = false;
+
+    function closeSubList() { if (subListOpen) { html += '</ul>\n'; subListOpen = false; } }
+    function closeList()    { closeSubList(); if (listOpen) { html += '</ul>\n'; listOpen = false; } }
+    function closeCallout() { if (calloutOpen) { html += '</span></div>\n'; calloutOpen = false; } }
+
+    lines.forEach(function (line) {
+      if (line.startsWith('```')) {
+        if (inCode) { html += '</code></pre>\n'; inCode = false; }
+        else { closeList(); if (inTable) { html += '</tbody></table>\n'; inTable = false; } html += '<pre><code>'; inCode = true; }
+        return;
+      }
+      if (inCode) { html += esc(line) + '\n'; return; }
+
+      if (line.startsWith('|')) {
+        if (/^\|[\s:\-|]+\|$/.test(line)) return;
+        var cells = line.split('|').slice(1, -1).map(function (c) { return c.trim(); });
+        if (!inTable) {
+          closeList();
+          html += '<table><thead><tr>';
+          cells.forEach(function (c) { html += '<th>' + inlineMd(c) + '</th>'; });
+          html += '</tr></thead><tbody>\n';
+          inTable = true;
+        } else {
+          html += '<tr>';
+          cells.forEach(function (c) { html += '<td>' + inlineMd(c) + '</td>'; });
+          html += '</tr>\n';
+        }
+        return;
+      }
+      if (inTable) { html += '</tbody></table>\n'; inTable = false; }
+
+      var subItem = line.match(/^[ \t]{2,}[-*] (.*)/);
+      if (subItem) {
+        if (!listOpen) { html += '<ul>\n'; listOpen = true; }
+        if (!subListOpen) { html += '<ul>\n'; subListOpen = true; }
+        html += '<li>' + inlineMd(subItem[1]) + '</li>\n';
+        return;
+      }
+
+      if (line.startsWith('- ') || line.startsWith('* ')) {
+        closeSubList();
+        if (!listOpen) { html += '<ul>\n'; listOpen = true; }
+        html += '<li>' + inlineMd(line.slice(2)) + '</li>\n';
+        return;
+      }
+
+      if (line.trim() !== '') closeList();
+
+      if      (line.startsWith('# '))   { html += '<h1>' + inlineMd(line.slice(2)) + '</h1>\n'; }
+      else if (line.startsWith('## '))  { html += '<h2>' + inlineMd(line.slice(3)) + '</h2>\n'; }
+      else if (line.startsWith('### ')) { html += '<h3>' + inlineMd(line.slice(4)) + '</h3>\n'; }
+      else if (line.startsWith('> ')) {
+        var bContent = line.slice(2);
+        var cm = bContent.match(/^\[!(INFO|TIP|WARNING|DANGER|PRIKAZ|OTAZKA)\]\s*(.*)/);
+        if (cm) {
+          closeCallout();
+          var ctype = cm[1].toLowerCase();
+          html += '<div class="callout callout-' + ctype + '"><span class="callout-icon">' + CALLOUT_ICONS[cm[1]] + '</span><span class="callout-body">';
+          if (cm[2]) html += inlineMd(cm[2]);
+          calloutOpen = true;
+        } else if (calloutOpen) {
+          if (bContent.trim()) html += '<br>' + inlineMd(bContent);
+        } else {
+          html += '<blockquote>' + inlineMd(bContent) + '</blockquote>\n';
+        }
+      }
+      else if (line.startsWith('---') && line.trim().replace(/-/g,'') === '') { html += '<hr>\n'; }
+      else if (line.trim() === '')      { closeCallout(); html += '<br>\n'; }
+      else                              { html += '<p>' + inlineMd(line) + '</p>\n'; }
+    });
+    closeList();
+    closeCallout();
+    if (inTable) html += '</tbody></table>\n';
+    if (inCode)  html += '</code></pre>\n';
+    return html;
+  }
+
+  var rows = document.getElementById('rows');
+
+  sections.forEach(function (s) {
+    var left = document.createElement('div');
+    left.className = 'row-left';
+    left.innerHTML = '<div class="row-label">' + esc(s.label) + '</div>' +
+                     '<div class="syntax">' + esc(s.syntax) + '</div>';
+
+    var right = document.createElement('div');
+    right.className = 'row-right';
+    right.innerHTML = '<div class="row-label">' + esc(s.label) + '</div>' +
+                      '<div class="md">' + renderMd(s.syntax) + '</div>';
+
+    rows.appendChild(left);
+    rows.appendChild(right);
+  });
+
+})();
+</script>
+
+</body>
+</html>
