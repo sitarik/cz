@@ -262,11 +262,13 @@
     if (route === 'dashboard') {
       dashboard.style.display = 'block';
       logView.style.display   = 'none';
+      document.body.classList.remove('log-active');
     } else if (route === 'log-listing') {
       dashboard.style.display = 'none';
       logView.style.display   = 'block';
       listing.style.display   = 'block';
       post.style.display      = 'none';
+      document.body.classList.add('log-active');
       renderLogListing();
     } else if (route.indexOf('log-post:') === 0) {
       var slug = route.slice(9);
@@ -274,6 +276,7 @@
       logView.style.display   = 'block';
       listing.style.display   = 'none';
       post.style.display      = 'block';
+      document.body.classList.add('log-active');
       loadLogPost(slug);
     }
   }

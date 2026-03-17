@@ -634,6 +634,10 @@
 
       /* Pravý panel */
       .panel-right { display: none; }
+
+      /* Log view — skrýt foto a whoami, nechat jen logo */
+      body.log-active .left-photo   { display: none; }
+      body.log-active .whoami-block { display: none; }
     }
 
     @media (prefers-color-scheme: light) {
