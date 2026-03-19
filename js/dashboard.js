@@ -42,6 +42,8 @@
     'assets/foto_sitarik_2.jpg',
     'assets/foto_sitarik_3.jpg',
     'assets/foto_sitarik_4.jpg',
+    'assets/foto_sitarik_5.jpg',
+    'assets/foto_sitarik_6.jpg',
   ];
   document.getElementById('left-photo').src =
     fotos[Math.floor(Math.random() * fotos.length)];
